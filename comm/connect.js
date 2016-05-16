@@ -3,12 +3,11 @@
 var io, connections = {}, onConnectionCallback;
 
 function Connection(socket) {
-	let connection = this;
 	this.id = socket.conn.id;
 	this.socket = socket;
 	this.session = 0;
-	this.socket.on('disconnect', function(){
-		connection.disconnect();
+	this.socket.on('disconnect', () => {
+		this.disconnect();
 	});
 }
 

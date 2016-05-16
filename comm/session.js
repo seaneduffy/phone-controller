@@ -1,11 +1,18 @@
 function Session(registrationCode) {
-	this.connections = [];
+	this.connections = {};
 	this.registrationCode = registrationCode;
 	this.id = registrationCode + Date.now();
 }
 
+Session.prototype.connectionCount = function() {
+	return Object.keys(this.connections).length;
+}
+
 Session.prototype.addConnection = function(connection, label) {
 	this.connections[label] = connection;
+	connection.addListener('disconnect', () => {
+		delete this.connections[label];
+	});
 	connection.setSession(this);
 };
 

@@ -22,7 +22,8 @@ function Controller() {
 			session.addConnection(connection, label);
 			this.communicate(session, label, 'registration code', registrationCode);
 			setTimeout(() => {
-				delete this.sessionBuffer[registrationCode];
+				if(this.sessionBuffer[registrationCode])
+					delete this.sessionBuffer[registrationCode];
 			}, 300000);
 		}
 		if(session === 0 || typeof session === "undefined") {
@@ -56,9 +57,18 @@ function Controller() {
 	}
 	
 	return {
-		addConnection: (connection, registrationCallback) => {
+		addConnection: (connection, registrationCallback, sessionEndCallback) => {
 			connection.addListener('register', (data) => {
 				var session = this.registerConnection(connection, data.label, data.registrationCode);
+				connection.addListener('disconnect', () => {
+					if(session.connectionCount() === 0) {
+						var registrationCode = session.getRegistrationCode();
+						if(this.sessionBuffer[registrationCode]) {\
+							delete this.sessionBuffer[registrationCode];
+						}
+						sessionEndCallback(session);
+					}
+				});
 				registrationCallback(session, data.label);
 			});
 		},

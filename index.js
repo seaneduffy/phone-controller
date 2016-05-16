@@ -32,6 +32,8 @@ let comm = require('./comm/')(http, (session, label) => {
 			default: break;
 		};
 	}
+}, (session) => {
+	delete sessions[session.getId()];
 });
 
 let sessions = {},
