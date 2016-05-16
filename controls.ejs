@@ -1,0 +1,156 @@
+<!Doctype html>
+<html>
+<head>
+	<title>Phone Controller // Controls</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+	body {
+		padding: 0;
+		margin: 0;
+	}
+	#registration button {
+		border: 1px solid black;
+		height: 40px;
+		position: absolute;
+		top: 60%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+	#registration input {
+		position: absolute;
+		border: 1px solid black;
+		height: 50px;
+		width: 200px;
+		top: 30%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		text-transform: uppercase;
+	}
+	#container button {
+		background: none;
+		border: none;
+		width: 30px;
+		height: 30px;
+		position: absolute;
+	}
+	#container {
+		display: none;
+		background: #2c2c2c url(controller.jpg);
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center center;
+		width: 100vw;
+		height: 100vh;
+	}
+	button#up {
+		top: 21vw;
+		left: 14vw;
+		width: 9vw;
+		height: 7vw;
+	}
+	button#down {
+	    top: 35.6vw;
+	    left: 14vw;
+	    width: 9vw;
+	    height: 7vw;
+	}
+	button#left {
+	    top: 27.6vw;
+	    left: 8vw;
+	    width: 7vw;
+	    height: 9vw;
+	}
+	button#right {
+	    top: 27.6vw;
+	    left: 23vw;
+	    width: 7vw;
+	    height: 9vw;
+	}
+	button#select {
+	    top: 33.6vw;
+	    left: 38vw;
+	    width: 9vw;
+	    height: 7vw;
+	}
+	button#start {
+	    top: 33.6vw;
+	    left: 49vw;
+	    width: 9vw;
+	    height: 7vw;
+	}
+	button#a {
+	    top: 31.6vw;
+	    left: 78.7vw;
+	    width: 10vw;
+	    height: 10vw;
+	}
+	button#b {
+	    top: 31.6vw;
+	    left: 65vw;
+	    width: 10vw;
+	    height: 10vw;
+	}
+	
+	</style>
+	<script src="/socket.io/socket.io.js"></script>
+	<body>
+		<div id="registration">
+			<input id="registrationCode" type="text" />
+			<button id="register">Connect Controller</button>
+		</div>
+		<div id="container">
+			<button id="up" data-input="UP"></button>
+			<button id="down" data-input="DOWN"></button>
+			<button id="left" data-input="LEFT"></button>
+			<button id="right" data-input="RIGHT"></button>
+			<button id="select" data-input="SELECT"></button>
+			<button id="start" data-input="START"></button>
+			<button id="a" data-input="A"></button>
+			<button id="b" data-input="B"></button>
+		</div>
+		<div id="error"></div>
+	<script>
+	(function(){
+		function handleBtnPress(event) {
+			socket.emit('input', {
+				label: 'controls', 
+				data: event.target.getAttribute('data-input')
+			});
+		}
+		function initBtn(label) {
+			var btn = document.getElementById(label);
+			btn.addEventListener('click', handleBtnPress);
+		}
+		var labels = [
+			'up',
+			'right',
+			'down',
+			'left',
+			'select',
+			'a',
+			'b',
+			'start'
+		];
+		var i, l = labels.length;
+		for(i=0; i<l; i++) {
+			initBtn(labels[i]);
+		}
+		var socket = io();
+		document.getElementById('register').addEventListener('click', function(){
+			socket.emit('register', {
+				label: 'controls', 
+				registrationCode: document.getElementById('registrationCode').value
+			});
+		});
+		socket.on('game start', function(){
+			document.getElementById('registration').style.display = 'none';
+			document.getElementById('container').style.display = 'block';
+		});
+		socket.on('connect error', function(message) {
+			document.getElementById('error').innerHTML = message;
+		});
+	}());
+	</script>
+	</body>
+</html>

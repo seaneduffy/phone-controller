@@ -1,0 +1,30 @@
+<!Doctype html>
+<html>
+<head>
+	<title>Phone Controller // Controls</title>
+	<style>
+	#registrationCode {
+		text-transform: uppercase;
+	}
+	</style>
+	<script src="/socket.io/socket.io.js"></script>
+	<body>
+	<div>Enter this code on controller:</div>
+	<div id="registrationCode"></div>
+	<script>
+	(function(){
+		var socket = io();
+		socket.on('registration code', function(code){
+			document.getElementById('registrationCode').innerHTML = code;
+		});
+		socket.on('game start', function(){
+			
+		});
+		socket.on('input', function(input) {
+			console.log(input);
+		});
+		socket.emit('register', {'label': 'gameScreen'});
+	}());
+	</script>
+	</body>
+</html>

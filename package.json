@@ -1,0 +1,24 @@
+{
+  "name": "phone-controller",
+  "version": "0.0.1",
+  "description": "Simple application to create video game controller with example NES UI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seaneduffy/phone-controller.git"
+  },
+  "author": "Sean Duffy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seaneduffy/phone-controller/issues"
+  },
+  "homepage": "https://github.com/seaneduffy/phone-controller",
+  "dependencies": {
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "socket.io": "^1.4.6"
+  }
+}
