@@ -63,7 +63,7 @@ function Controller() {
 				connection.addListener('disconnect', () => {
 					if(session.connectionCount() === 0) {
 						var registrationCode = session.getRegistrationCode();
-						if(this.sessionBuffer[registrationCode]) {\
+						if(this.sessionBuffer[registrationCode]) {
 							delete this.sessionBuffer[registrationCode];
 						}
 						sessionEndCallback(session);
