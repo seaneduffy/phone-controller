@@ -10,6 +10,7 @@ function Controller() {
 	
 	this.registerConnection = function(connection, label, registrationCode) {
 		let session = 0;
+		console.log(connection, label, registrationCode);
 		if(typeof registrationCode !== "undefined") {
 			session = this.sessionBuffer[registrationCode];
 			if(!!session) {
