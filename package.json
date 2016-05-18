@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://github.com/seaneduffy/phone-controller.git"
   },
-  "author": "Sean Duffy",
+  "author": "Sean Duffy <seaneduffy@gmail.com> (http://seaneduffy.com)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/seaneduffy/phone-controller/issues"
@@ -19,6 +19,6 @@
   "dependencies": {
     "ejs": "^2.4.1",
     "express": "^4.13.4",
-    "socket.io": "^1.4.6"
+    "socket.io-connection-manager": "^1.0.1"
   }
 }

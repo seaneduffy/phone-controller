@@ -20,27 +20,31 @@ http.listen(8880, function(){
 	console.log('listening on *:8880');
 });
 
-let comm = require('./comm/')(http, (session, label) => {
-	if(typeof session !== "undefined") {
-		switch(label) {
-			case 'gameScreen':
-				sessions[session.getId()] = session;
-				break;
-			case 'controls':
-				init(sessions[session.getId()]);
-				break;
-			default: break;
-		};
+let socketManager = require('socket.io-connection-manager')(http);
+socketManager.onRegistration(function(connection){
+	let session = connection.getSession();
+	switch(connection.getLabel()) {
+		case 'gameScreen':
+			games[session.getId()] = {
+				gameScreenConnection: connection
+			};
+			socketManager.sendToConnection(connection, 'registration code', session.getRegistrationCode());
+			break;
+		case 'controls':
+			games[session.getId()].controlsConnection = connection;
+			init(games[session.getId()]);
+			break;
+		default: break;
 	}
-}, (session) => {
-	delete sessions[session.getId()];
 });
-
-let sessions = {},
-	init = function(session){
-		comm.communicate(session, 'controls', 'game start');
-		comm.communicate(session, 'gameScreen', 'game start');
-		comm.listen(session, 'controls', 'input', (input) => {
-			comm.communicate(session, 'gameScreen', 'input', input.data);
+socketManager.onSessionEnd(function(session){
+	delete games[session.getId()];
+});
+let games = {},
+	init = function(game){
+		socketManager.sendToConnection(game.controlsConnection, 'game start');
+		socketManager.sendToConnection(game.gameScreenConnection, 'game start');
+		socketManager.listenToConnection(game.controlsConnection, 'input', (input) => {
+			socketManager.sendToConnection(game.gameScreenConnection, 'input', input.data);
 		});
 	};
